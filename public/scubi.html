@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to Scubi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    h1 {
+      font-size: 4em;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      animation: glow 1s infinite alternate;
+    }
+
+    .loader {
+      font-size: 1.2em;
+      border-right: 2px solid white;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3s steps(40, end) forwards, blink 0.75s step-end infinite;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #fff; }
+      to { text-shadow: 0 0 20px #fff, 0 0 30px #fff; }
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 28ch }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+  </style>
+</head>
+<body>
+  <h1>SCUBI</h1>
+  <div class="loader">Initializing emotional intelligence...</div>
+
+  <!-- Hidden audio element -->
+  <audio id="scubi-voice" src="scubi-voice.mp3" autoplay></audio>
+
+  <script>
+  function speakScubi() {
+    const msg = new SpeechSynthesisUtterance(" SCUBI HERE BOSS ");
+    msg.lang = 'en-US';
+    msg.pitch = 1.1;
+    msg.rate = 0.95;
+    msg.volume = 1.0;
+
+    // Load voices properly
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      msg.voice = voices.find(voice => voice.name.includes('Google') || voice.name.includes('Microsoft')) || voices[0];
+      speechSynthesis.speak(msg);
+    } else {
+      // Wait for voices to load
+      speechSynthesis.onvoiceschanged = () => {
+        const newVoices = speechSynthesis.getVoices();
+        msg.voice = newVoices.find(voice => voice.name.includes('Google') || voice.name.includes('Microsoft')) || newVoices[0];
+        speechSynthesis.speak(msg);
+      };
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    speakScubi();
+  });
+
+  // Redirect after 4 seconds
+  setTimeout(() => {
+    window.location.href = "main.html";
+  }, 4000);
+</script>
+
+
+</body>
+</html>
